@@ -158,7 +158,7 @@ class _TasksScreenState extends State<TasksScreen> {
                           fontSize: 14)),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
-                    value: frequency,
+                    initialValue: frequency,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),

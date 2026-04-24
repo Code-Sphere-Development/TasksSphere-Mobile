@@ -48,7 +48,7 @@ class PushNotificationService {
     );
 
     await _localNotificationsPlugin.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         // Handle notification tap
       },
@@ -223,10 +223,10 @@ class PushNotificationService {
     );
 
     await _localNotificationsPlugin.show(
-      message.hashCode,
-      message.notification?.title,
-      message.notification?.body,
-      platformChannelSpecifics,
+      id: message.hashCode,
+      title: message.notification?.title,
+      body: message.notification?.body,
+      notificationDetails: platformChannelSpecifics,
       payload: message.data.toString(),
     );
   }

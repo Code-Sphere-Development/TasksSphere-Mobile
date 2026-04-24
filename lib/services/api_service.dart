@@ -19,9 +19,11 @@ class ApiService {
       },
       onError: (DioException e, handler) async {
         if (e.response?.statusCode == 401) {
-          // Token abgelaufen oder ungültig
+          // Token ungültig - nur ausloggen wenn es eine echte Server-Antwort ist
+          // (nicht bei Netzwerkfehlern oder Timeouts)
           final prefs = await SharedPreferences.getInstance();
           await prefs.remove('auth_token');
+          await prefs.remove('user_data');
           onUnauthorized?.call();
         }
         return handler.next(e);
