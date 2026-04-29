@@ -1,9 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/auth_provider.dart';
 import 'providers/task_provider.dart';
 import 'screens/login_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'screens/tasks_screen.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -245,25 +247,40 @@ class AuthWrapper extends StatefulWidget {
 
 class _AuthWrapperState extends State<AuthWrapper> {
   bool _initialized = false;
+  String? _storageMode; // null = not loaded yet, 'local', 'cloud', 'onboarding'
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_initialized) {
-      Future.microtask(() {
-        if (mounted) {
-          Provider.of<AuthProvider>(context, listen: false).tryAutoLogin();
-        }
-      });
       _initialized = true;
+      _checkStorageMode();
+    }
+  }
+
+  Future<void> _checkStorageMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final mode = prefs.getString('storage_mode');
+
+    if (mode == null) {
+      setState(() => _storageMode = 'onboarding');
+    } else if (mode == 'local') {
+      if (mounted) {
+        Provider.of<TaskProvider>(context, listen: false).setLocalMode();
+      }
+      setState(() => _storageMode = 'local');
+    } else {
+      // cloud mode — do normal auth
+      if (mounted) {
+        Provider.of<AuthProvider>(context, listen: false).tryAutoLogin();
+      }
+      setState(() => _storageMode = 'cloud');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-
-    if (authProvider.isInitializing) {
+    if (_storageMode == null) {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -271,10 +288,23 @@ class _AuthWrapperState extends State<AuthWrapper> {
       );
     }
 
-    if (authProvider.isAuthenticated) {
-      return const TasksScreen();
-    } else {
-      return const LoginScreen();
+    if (_storageMode == 'onboarding') {
+      return const OnboardingScreen();
     }
+
+    if (_storageMode == 'local') {
+      return const TasksScreen();
+    }
+
+    // Cloud mode
+    final authProvider = Provider.of<AuthProvider>(context);
+    if (authProvider.isInitializing) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    return authProvider.isAuthenticated ? const TasksScreen() : const LoginScreen();
   }
 }

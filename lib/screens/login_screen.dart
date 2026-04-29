@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/auth_provider.dart';
+import '../providers/task_provider.dart';
 import '../l10n/app_localizations.dart';
 
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
+import 'tasks_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -174,6 +177,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('storage_mode', 'local');
+                  if (!context.mounted) return;
+                  Provider.of<TaskProvider>(context, listen: false).setLocalMode();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const TasksScreen()),
+                  );
+                },
+                child: Text(
+                  'Ohne Account fortfahren',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
                   ),
                 ),
               ),

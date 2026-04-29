@@ -39,6 +39,7 @@ class AuthProvider with ChangeNotifier {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
         await prefs.setString('user_data', jsonEncode(_user!.toJson()));
+        await prefs.setString('storage_mode', 'cloud');
 
         _isAuthenticated = true;
 
@@ -78,6 +79,7 @@ class AuthProvider with ChangeNotifier {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
         await prefs.setString('user_data', jsonEncode(_user!.toJson()));
+        await prefs.setString('storage_mode', 'cloud');
 
         _isAuthenticated = true;
 
