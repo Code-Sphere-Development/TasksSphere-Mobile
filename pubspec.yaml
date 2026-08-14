@@ -39,7 +39,7 @@ dependencies:
   shared_preferences: ^2.2.2
   intl: ^0.20.3
   google_fonts: ^8.2.1
-  firebase_core: ^4.12.1
+  firebase_core: ^4.13.0
   firebase_messaging: ^16.2.0
   firebase_analytics: ^12.4.5
   flutter_local_notifications: ^22.3.0
