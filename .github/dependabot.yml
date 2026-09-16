@@ -16,6 +16,13 @@ updates:
       - "Coho04"
     labels:
       - "dependencies"
+    groups:
+      # Die FlutterFire-Plugins pinnen das firebase-ios-sdk exakt und erscheinen
+      # im Gleichschritt. Einzeln angehoben widersprechen sie sich, und die
+      # Aufloesung der Swift-Pakete schlaegt fehl. Deshalb ein PR fuer alle.
+      firebase:
+        patterns:
+          - "firebase_*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
