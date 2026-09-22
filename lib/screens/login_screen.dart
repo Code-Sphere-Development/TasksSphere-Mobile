@@ -7,6 +7,7 @@ import '../l10n/app_localizations.dart';
 
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
+import '../widgets/legal_links.dart';
 import 'tasks_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -201,6 +202,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+              const LegalLinksRow(),
             ],
           ),
         ),

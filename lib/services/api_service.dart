@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config.dart';
+
 class ApiService {
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
@@ -34,8 +36,7 @@ class ApiService {
   final Dio _dio = Dio();
   VoidCallback? onUnauthorized;
 
-  // Hinweis: In der Produktion sollte dies konfigurierbar sein.
-  final String baseUrl = 'https://tasks.code-sphere.de/api';
+  final String baseUrl = AppConfig.apiBaseUrl;
 
   Dio get dio => _dio;
 }

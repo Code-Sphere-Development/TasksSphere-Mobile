@@ -84,5 +84,9 @@
   "timesForInterval": "Festgelegte Uhrzeiten pro Intervall:",
   "timezone": "Zeitzone",
   "startAtOptional": "Startet am (optional)",
-  "defaultToday": "Standardmäßig heute."
+  "defaultToday": "Standardmäßig heute.",
+  "legalNotice": "Impressum",
+  "privacyPolicy": "Datenschutz",
+  "contact": "Kontakt",
+  "couldNotOpenLink": "Der Link konnte nicht geöffnet werden."
 }
