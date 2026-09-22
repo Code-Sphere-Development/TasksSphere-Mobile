@@ -84,5 +84,9 @@
   "timesForInterval": "Set times per interval:",
   "timezone": "Timezone",
   "startAtOptional": "Starts at (optional)",
-  "defaultToday": "Default is today."
+  "defaultToday": "Default is today.",
+  "legalNotice": "Legal notice",
+  "privacyPolicy": "Privacy",
+  "contact": "Contact",
+  "couldNotOpenLink": "The link could not be opened."
 }

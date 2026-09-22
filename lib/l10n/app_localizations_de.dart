@@ -228,4 +228,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get defaultToday => 'Standardmäßig heute.';
+
+  @override
+  String get legalNotice => 'Impressum';
+
+  @override
+  String get privacyPolicy => 'Datenschutz';
+
+  @override
+  String get contact => 'Kontakt';
+
+  @override
+  String get couldNotOpenLink => 'Der Link konnte nicht geöffnet werden.';
 }

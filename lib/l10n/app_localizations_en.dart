@@ -226,4 +226,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get defaultToday => 'Default is today.';
+
+  @override
+  String get legalNotice => 'Legal notice';
+
+  @override
+  String get privacyPolicy => 'Privacy';
+
+  @override
+  String get contact => 'Contact';
+
+  @override
+  String get couldNotOpenLink => 'The link could not be opened.';
 }

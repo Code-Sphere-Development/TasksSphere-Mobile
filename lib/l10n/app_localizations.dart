@@ -523,6 +523,30 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Standardmäßig heute.'**
   String get defaultToday;
+
+  /// No description provided for @legalNotice.
+  ///
+  /// In de, this message translates to:
+  /// **'Impressum'**
+  String get legalNotice;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In de, this message translates to:
+  /// **'Datenschutz'**
+  String get privacyPolicy;
+
+  /// No description provided for @contact.
+  ///
+  /// In de, this message translates to:
+  /// **'Kontakt'**
+  String get contact;
+
+  /// No description provided for @couldNotOpenLink.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Link konnte nicht geöffnet werden.'**
+  String get couldNotOpenLink;
 }
 
 class _AppLocalizationsDelegate

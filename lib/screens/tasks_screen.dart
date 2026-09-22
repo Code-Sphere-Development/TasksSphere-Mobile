@@ -4,6 +4,7 @@ import '../providers/auth_provider.dart';
 import '../providers/task_provider.dart';
 import '../models/task.dart';
 import 'profile_screen.dart';
+import '../widgets/legal_links.dart';
 import 'lists_screen.dart';
 import 'calendar_screen.dart';
 import 'stats_screen.dart';
@@ -722,6 +723,8 @@ class _TasksScreenState extends State<TasksScreen> {
               );
             },
           ),
+          const Divider(),
+          const LegalDrawerSection(),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.redAccent),
