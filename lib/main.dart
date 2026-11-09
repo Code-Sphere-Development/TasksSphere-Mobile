@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
           onSurface: const Color(0xFFf9fafb),
         ),
         scaffoldBackgroundColor: const Color(0xFF111827), // Gray-900
-        textTheme: GoogleFonts.figtreeTextTheme(
+        textTheme: _figtreeTextTheme(
           ThemeData.dark().textTheme,
         ).copyWith(
           displayLarge: GoogleFonts.figtree(
@@ -166,7 +166,7 @@ class MyApp extends StatelessWidget {
           surface: Colors.white,
         ),
         scaffoldBackgroundColor: const Color(0xFFf9fafb), // Gray-50
-        textTheme: GoogleFonts.figtreeTextTheme(
+        textTheme: _figtreeTextTheme(
           Theme.of(context).textTheme,
         ).copyWith(
           displayLarge: GoogleFonts.figtree(
@@ -310,4 +310,31 @@ class _AuthWrapperState extends State<AuthWrapper> {
     }
     return authProvider.isAuthenticated ? const TasksScreen() : const LoginScreen();
   }
+}
+
+/// Applies Figtree to every style of [base].
+///
+/// google_fonts 9 builds its `*TextTheme` helpers on `package:material_ui`,
+/// whose `TextTheme` is a different type than the one from
+/// `package:flutter/material.dart` used by this app. `GoogleFonts.figtree`
+/// works on plain `TextStyle`s, so the theme is assembled here per style -
+/// the same mapping `GoogleFonts.figtreeTextTheme` performs internally.
+TextTheme _figtreeTextTheme(TextTheme base) {
+  return TextTheme(
+    displayLarge: GoogleFonts.figtree(textStyle: base.displayLarge),
+    displayMedium: GoogleFonts.figtree(textStyle: base.displayMedium),
+    displaySmall: GoogleFonts.figtree(textStyle: base.displaySmall),
+    headlineLarge: GoogleFonts.figtree(textStyle: base.headlineLarge),
+    headlineMedium: GoogleFonts.figtree(textStyle: base.headlineMedium),
+    headlineSmall: GoogleFonts.figtree(textStyle: base.headlineSmall),
+    titleLarge: GoogleFonts.figtree(textStyle: base.titleLarge),
+    titleMedium: GoogleFonts.figtree(textStyle: base.titleMedium),
+    titleSmall: GoogleFonts.figtree(textStyle: base.titleSmall),
+    bodyLarge: GoogleFonts.figtree(textStyle: base.bodyLarge),
+    bodyMedium: GoogleFonts.figtree(textStyle: base.bodyMedium),
+    bodySmall: GoogleFonts.figtree(textStyle: base.bodySmall),
+    labelLarge: GoogleFonts.figtree(textStyle: base.labelLarge),
+    labelMedium: GoogleFonts.figtree(textStyle: base.labelMedium),
+    labelSmall: GoogleFonts.figtree(textStyle: base.labelSmall),
+  );
 }
