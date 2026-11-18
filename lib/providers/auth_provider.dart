@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 import '../services/api_service.dart';
+import '../services/device_identity.dart';
 import '../services/push_notification_service.dart';
 import 'package:dio/dio.dart';
 
@@ -26,10 +27,14 @@ class AuthProvider with ChangeNotifier {
 
   Future<bool> login(String email, String password) async {
     try {
+      // Mit Geraete-ID ersetzt der Server die bisherige Sitzung dieses
+      // Geraets, statt bei jeder Neuanmeldung eine weitere anzulegen.
+      final deviceId = await DeviceIdentity.forLogin();
       final response = await _apiService.dio.post('/login', data: {
         'email': email,
         'password': password,
         'device_name': 'flutter_app',
+        if (deviceId != null) 'device_id': deviceId,
       });
 
       if (response.statusCode == 200) {
