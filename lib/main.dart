@@ -49,6 +49,9 @@ Future<void> main() async {
       // (Default ab sentry_flutter 10).
       options.traceLifecycle = SentryTraceLifecycle.static;
       options.sendDefaultPii = false;
+      // print/debugPrint nicht als Breadcrumbs mitschicken: die App gibt dort
+      // FCM-/APNs-Tokens und rohe Fehlerantworten beim Login aus.
+      options.enablePrintBreadcrumbs = false;
       // Profiling und `enableLogs` gibt es ab sentry_flutter 10 nicht mehr:
       // Profiling wurde entfernt, Logs sind immer aktiv.
     },
