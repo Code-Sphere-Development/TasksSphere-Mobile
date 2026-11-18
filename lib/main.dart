@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/auth_provider.dart';
 import 'providers/task_provider.dart';
@@ -18,8 +20,43 @@ import 'services/push_notification_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 
-void main() async {
+/// GlitchTip-/Sentry-DSN, nur zur Build-Zeit per
+/// `--dart-define=SENTRY_DSN=...` gesetzt. Leer = kein Tracking.
+const String _sentryDsn = String.fromEnvironment('SENTRY_DSN');
+
+/// Optionaler Override der Umgebung per `--dart-define=SENTRY_ENVIRONMENT=...`.
+const String _sentryEnvironment = String.fromEnvironment('SENTRY_ENVIRONMENT');
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (_sentryDsn.isEmpty) {
+    await _startApp();
+    return;
+  }
+
+  // SentryFlutter setzt FlutterError.onError und PlatformDispatcher.onError
+  // selbst; Fehler aus der Firebase-Initialisierung landen ueber den
+  // appRunner ebenfalls in Sentry.
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = _sentryDsn;
+      options.environment = _sentryEnvironment.isNotEmpty
+          ? _sentryEnvironment
+          : (kReleaseMode ? 'production' : 'debug');
+      options.tracesSampleRate = 0.1;
+      // GlitchTip versteht klassische Transaktionen, kein Span-Streaming
+      // (Default ab sentry_flutter 10).
+      options.traceLifecycle = SentryTraceLifecycle.static;
+      options.sendDefaultPii = false;
+      // Profiling und `enableLogs` gibt es ab sentry_flutter 10 nicht mehr:
+      // Profiling wurde entfernt, Logs sind immer aktiv.
+    },
+    appRunner: _startApp,
+  );
+}
+
+Future<void> _startApp() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -27,7 +64,6 @@ void main() async {
 
   String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
   debugPrint('APNs device token: $apnsToken');
-
 
   runApp(
     MultiProvider(
@@ -53,6 +89,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+        SentryNavigatorObserver(),
       ],
       localizationsDelegates: const [
         AppLocalizations.delegate,
