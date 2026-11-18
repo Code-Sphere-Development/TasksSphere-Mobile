@@ -3,9 +3,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'api_service.dart';
+import 'device_identity.dart';
 
 class PushNotificationService {
   static final FirebaseMessaging _fcm = FirebaseMessaging.instance;
@@ -165,25 +164,7 @@ class PushNotificationService {
       if (fcmToken != null) {
         final apiService = ApiService();
 
-        // Get device ID
-        String? deviceId;
-        try {
-          final deviceInfo = DeviceInfoPlugin();
-          if (kIsWeb) {
-            deviceId = 'web_browser';
-          } else if (Platform.isAndroid) {
-            final androidInfo = await deviceInfo.androidInfo;
-            deviceId = androidInfo.id;
-          } else if (Platform.isIOS) {
-            final iosInfo = await deviceInfo.iosInfo;
-            deviceId = iosInfo.identifierForVendor;
-          } else if (Platform.isMacOS) {
-            final macOsInfo = await deviceInfo.macOsInfo;
-            deviceId = macOsInfo.systemGUID;
-          }
-        } catch (e) {
-          debugPrint("Error getting device info: $e");
-        }
+        final deviceId = await DeviceIdentity.id();
 
         try {
           await apiService.dio.post('/fcm-token', data: {
